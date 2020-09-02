@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="js/layui/css/layui.css" media="all">
+		<script src="js/layui/layui.js"></script>
+		<script src="js/echarts.min.js"></script>
+		<script src="js/jquery-3.3.1.js"></script>
+		<style>
+			#dvtbusers{
+				width: 80%;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 列表 -->
+		<div >
+			<table id="dvusers" lay-filter="test"></table>
+		</div>
+		<div><button class="layui-btn" onclick="loadEcharts()">刷新图表</button></div>
+		<div  id="dvtbusers" ></div>
+		<script>
+			
+			layui.use(['table'], function(){
+			  var table = layui.table;
+			  //第一个实例
+			  table.render({
+			    elem: '#dvusers'
+			    ,height: 312
+			    ,url: 'http://localhost:8080/user/page.do' //数据接口
+			    ,page: true //开启分页
+			    ,cols: [[ //表头
+			      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+			      ,{field: 'name', title: '用户名', width:80}
+			      ,{field: 'sex', title: '性别', width:80, sort: true}
+			      ,{field: 'dept', title: '部门', width:80} 
+			      ,{field: 'job', title: '职位', width: 177}
+			      ,{field: 'birthday', title: '生日', width: 80, sort: true}
+			    ]]
+			  });
+			});
+			
+			var echarts1=echarts.init(document.getElementById("dvtbusers"));
+			var option1={
+				title:{
+					text:"各部门人数",
+					link:"http://www.baidu.com"
+				},
+				tooltip: {
+				    trigger: 'axis'
+				},
+				legend: {
+				    data: ['部门人数']
+				},
+				toolbox: {
+				    show: true,
+				    feature: {
+				        dataZoom: {
+				                yAxisIndex: 'none'
+				        },
+				        dataView: {readOnly: false},
+				        magicType: {type: ['line', 'bar']},
+				        restore: {},
+				        saveAsImage: {}
+				    }
+				},
+				xAxis: {
+				    type: 'category',
+				    boundaryGap: false,
+				    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+				},
+				yAxis: {
+				    type: 'value',
+				    axisLabel: {
+				        formatter: '{value}'
+				    }
+				},
+				series: [
+				    {
+				        name: '部门人数',
+				        type: 'line',
+				        data: [11, 11, 15, 13, 12, 13, 10],
+				     }
+				    ]
+			}
+			echarts1.setOption(option1);
+			
+			
+			function loadEcharts(){
+				// $.get()
+				// $.post();
+				$.ajax({
+					url:"http://localhost:8080/user/echarts.do",
+					method:"get",
+					success:function(r){
+						console.log(r);
+						option1.xAxis.data=r.depts;
+						option1.series[0].data=r.cts;
+						console.log(option1);
+						echarts1.setOption(option1);
+					}
+				})
+			}
+		</script>
+	</body>
+</html>
