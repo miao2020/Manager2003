@@ -3,7 +3,10 @@ package com.feri.ssm.service;
 import com.feri.ssm.entity.User;
 import com.feri.ssm.vo.LayuiTablePage;
 import com.feri.ssm.vo.UserEcharts;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,4 +20,8 @@ public interface UserService {
     int svaeBatch(List<User> userList);
     LayuiTablePage page(int page,int limit);
     UserEcharts tb();
+
+    int batch(MultipartFile file) throws IOException;
+
+    void download(int num, HttpServletResponse response) throws IOException;
 }

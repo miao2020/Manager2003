@@ -7,11 +7,12 @@
         insert into t_user(name,birthday,sex,dept,job,ctime)
         values(#{name} ,#{birthday},#{sex} ,#{dept},#{job},now());
     </insert>
-    <insert id="saveBatch" >
+    <insert id="saveBatch" parameterType="list">
         insert into t_user(name,birthday,sex,dept,job,ctime) values
-        <foreach collection="list" open="(" close=")" separator=",">
-            #{name} ,#{birthday},#{sex},#{dept},#{job},now()
+        <foreach collection="list" item="u"  separator=",">
+            (#{u.name},#{u.birthday},#{u.sex},#{u.dept},#{u.job},now())
         </foreach>
+        ;
     </insert>
     <select id="selectCount" resultType="int">
         select count(*) from t_user;
@@ -21,5 +22,8 @@
     </select>
     <select id="depts" resultType="com.feri.ssm.dto.UserDept">
         select dept,count(*) ct from t_user group by dept order by dept;
+    </select>
+    <select id="selectNum" resultType="com.feri.ssm.entity.User">
+        select * from t_user order by id limit #{num}
     </select>
 </mapper>

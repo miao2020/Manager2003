@@ -19,12 +19,35 @@
 		<div >
 			<table id="dvusers" lay-filter="test"></table>
 		</div>
-		<div><button class="layui-btn" onclick="loadEcharts()">刷新图表</button></div>
+		<div>
+			<button class="layui-btn" onclick="loadEcharts()">刷新图表</button>
+			<a href="user/down.do?num=1000">下载数据</a>
+			<button type="button" class="layui-btn" id="btnupload">
+				<i class="layui-icon">&#xe67c;</i>上传图片
+			</button>
+			<img src="" id="imgpc">
+		</div>
 		<div  id="dvtbusers" ></div>
 		<script>
 			
-			layui.use(['table'], function(){
+			layui.use(['table','upload'], function(){
 			  var table = layui.table;
+			  var upload = layui.upload;
+
+			  //执行实例
+			  var uploadInst = upload.render({
+				elem: '#btnupload' //绑定元素
+				,url: 'user/upload.do' //上传接口
+				,done: function(res){
+				  //上传完毕回调
+				  console.log(res);
+				  document.getElementById("imgpc").src=res.data;
+				}
+				,error: function(){
+				  //请求异常回调
+				}
+			  });
+
 			  //第一个实例
 			  table.render({
 			    elem: '#dvusers'

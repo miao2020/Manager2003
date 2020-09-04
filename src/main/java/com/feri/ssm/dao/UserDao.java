@@ -24,4 +24,6 @@ public interface UserDao {
 
     //查询统计部门人数
     List<UserDept> depts();
+    List<User> selectNum(int num);
+
 }
